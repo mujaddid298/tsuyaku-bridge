@@ -1,0 +1,40 @@
+{
+  "extName": {
+    "message": "Tsuyaku Bridge",
+    "description": "Nama ekstensi"
+  },
+  "extDescription": {
+    "message": "Read anything. Understand everything",
+    "description": "Deskripsi ekstensi"
+  },
+  "actionTitle": {
+    "message": "Tsuyaku Bridge",
+    "description": "Judul toolbar action"
+  },
+  "btnTranslate": {
+    "message": "Terjemahkan Halaman"
+  },
+  "btnRestore": {
+    "message": "Tampilkan Asli"
+  },
+  "btnCancel": {
+    "message": "Batal"
+  },
+  "statusIdle": {
+    "message": "Siap"
+  },
+  "statusTranslating": {
+    "message": "Menerjemahkan..."
+  },
+  "statusDone": {
+    "message": "Selesai"
+  },
+  "errConnect": {
+    "message": "Tidak dapat terhubung ke $URL$. Pastikan server aktif.",
+    "placeholders": {
+      "url": {
+        "content": "$1"
+      }
+    }
+  }
+}

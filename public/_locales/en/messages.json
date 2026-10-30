@@ -1,0 +1,40 @@
+{
+  "extName": {
+    "message": "Tsuyaku Bridge",
+    "description": "Extension name"
+  },
+  "extDescription": {
+    "message": "Read anything. Understand everything",
+    "description": "Extension description"
+  },
+  "actionTitle": {
+    "message": "Tsuyaku Bridge",
+    "description": "Action title"
+  },
+  "btnTranslate": {
+    "message": "Translate Page"
+  },
+  "btnRestore": {
+    "message": "Show Original"
+  },
+  "btnCancel": {
+    "message": "Cancel"
+  },
+  "statusIdle": {
+    "message": "Ready"
+  },
+  "statusTranslating": {
+    "message": "Translating..."
+  },
+  "statusDone": {
+    "message": "Done"
+  },
+  "errConnect": {
+    "message": "Cannot connect to $URL$. Please check if the server is running.",
+    "placeholders": {
+      "url": {
+        "content": "$1"
+      }
+    }
+  }
+}

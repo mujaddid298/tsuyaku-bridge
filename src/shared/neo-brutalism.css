@@ -1,0 +1,375 @@
+/* ==========================================================
+   NEO BRUTALISM KIT – AI Page Translator Extension Theme
+   ========================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@500;700&display=swap');
+
+:root {
+  /* warna dasar */
+  --nb-bg: #f7e9d0;
+  --nb-ink: #111111;
+  --nb-paper: #fff8ea;
+  /* warna aksen */
+  --nb-pink: #ff8fc4;
+  --nb-teal: #6fd3b4;
+  --nb-orange: #ff9a3c;
+  --nb-yellow: #ffd93b;
+  --nb-blue: #6aa8ff;
+  --nb-red: #ff5a3c;
+  --nb-purple: #c084fc;
+  --nb-lime: #a3e635;
+  /* bentuk */
+  --nb-border: 2.5px;
+  --nb-radius: 16px;
+  --nb-radius-sm: 10px;
+  --nb-radius-pill: 999px;
+  --nb-shadow: 5px 5px 0 var(--nb-ink);
+  --nb-shadow-sm: 3px 3px 0 var(--nb-ink);
+  --nb-shadow-xs: 2px 2px 0 var(--nb-ink);
+  /* huruf */
+  --nb-font-display: "Archivo Black", "Impact", "Arial Black", sans-serif;
+  --nb-font-body: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --nb-bg: #191512;
+    --nb-ink: #fdf6e7;
+    --nb-paper: #28211a;
+    --nb-shadow: 5px 5px 0 #000000;
+    --nb-shadow-sm: 3px 3px 0 #000000;
+    --nb-shadow-xs: 2px 2px 0 #000000;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --nb-bg: #191512;
+  --nb-ink: #fdf6e7;
+  --nb-paper: #28211a;
+  --nb-shadow: 5px 5px 0 #000000;
+  --nb-shadow-sm: 3px 3px 0 #000000;
+  --nb-shadow-xs: 2px 2px 0 #000000;
+  color-scheme: dark;
+}
+
+/* ---------- dasar ---------- */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--nb-bg);
+  color: var(--nb-ink);
+  font-family: var(--nb-font-body);
+  font-weight: 500;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--nb-blue);
+  outline-offset: 2px;
+}
+
+.nb-container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* ---------- tipografi ---------- */
+.nb-display, .nb-h1, .nb-h2, .nb-h3, .nb-h4 {
+  font-family: var(--nb-font-display);
+  font-weight: 400;
+  line-height: 1.05;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.nb-h1 { font-size: clamp(2.5rem, 8vw, 4.5rem); text-transform: uppercase; }
+.nb-h2 { font-size: clamp(1.8rem, 5vw, 3rem); }
+.nb-h3 { font-size: 1.35rem; }
+.nb-h4 { font-size: 1.1rem; }
+.nb-lead { font-size: 1.05rem; }
+
+/* ---------- kotak & kartu ---------- */
+.nb-box {
+  border: var(--nb-border) solid var(--nb-ink);
+  border-radius: var(--nb-radius);
+  box-shadow: var(--nb-shadow);
+  padding: 16px;
+  background: var(--nb-paper);
+  color: var(--nb-ink);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.nb-box-sm {
+  border: var(--nb-border) solid var(--nb-ink);
+  border-radius: var(--nb-radius-sm);
+  box-shadow: var(--nb-shadow-sm);
+  padding: 12px;
+  background: var(--nb-paper);
+  color: var(--nb-ink);
+}
+
+/* kotak berwarna: teks SELALU hitam supaya terbaca di mode gelap */
+.nb-pink, .nb-teal, .nb-orange, .nb-yellow, .nb-blue, .nb-red, .nb-lime, .nb-purple {
+  color: #111111 !important;
+}
+.nb-pink { background: var(--nb-pink); }
+.nb-teal { background: var(--nb-teal); }
+.nb-orange { background: var(--nb-orange); }
+.nb-yellow { background: var(--nb-yellow); }
+.nb-blue { background: var(--nb-blue); }
+.nb-red { background: var(--nb-red); }
+.nb-lime { background: var(--nb-lime); }
+.nb-purple { background: var(--nb-purple); }
+
+.nb-tilt-l { transform: rotate(-1.5deg); }
+.nb-tilt-r { transform: rotate(1.5deg); }
+
+/* ---------- tombol ---------- */
+.nb-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: var(--nb-border) solid var(--nb-ink);
+  border-radius: var(--nb-radius-pill);
+  padding: 10px 18px;
+  font: 700 0.92rem var(--nb-font-body);
+  background: var(--nb-yellow);
+  color: #111111;
+  text-decoration: none;
+  box-shadow: var(--nb-shadow-sm);
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
+}
+
+.nb-btn:hover:not([disabled]) {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--nb-ink);
+}
+
+.nb-btn:active:not([disabled]) {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--nb-ink);
+}
+
+.nb-btn-alt {
+  background: var(--nb-paper);
+  color: var(--nb-ink);
+}
+
+.nb-btn-dark {
+  background: #111111;
+  color: #fff8ea;
+  box-shadow: 3px 3px 0 var(--nb-red);
+}
+
+.nb-btn-icon {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+.nb-btn[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  filter: grayscale(40%);
+}
+
+/* ---------- pill, badge, stiker ---------- */
+.nb-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: var(--nb-border) solid var(--nb-ink);
+  border-radius: var(--nb-radius-pill);
+  padding: 5px 12px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  background: var(--nb-paper);
+  color: var(--nb-ink);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
+}
+
+.nb-pill.active {
+  background: var(--nb-yellow);
+  color: #111111;
+  box-shadow: var(--nb-shadow-xs);
+  transform: translateY(-1px);
+}
+
+.nb-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--nb-yellow);
+  color: #111111;
+  border: var(--nb-border) solid var(--nb-ink);
+  border-radius: var(--nb-radius-pill);
+  padding: 3px 10px;
+  font-family: var(--nb-font-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transform: rotate(-3deg);
+  box-shadow: 2px 2px 0 var(--nb-ink);
+}
+
+.nb-sticker {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--nb-teal);
+  color: #111111;
+  border: var(--nb-border) solid var(--nb-ink);
+  box-shadow: var(--nb-shadow-sm);
+  display: grid;
+  place-content: center;
+  text-align: center;
+  font-family: var(--nb-font-display);
+  line-height: 1;
+  transform: rotate(-6deg);
+}
+
+/* ---------- form ---------- */
+.nb-field {
+  display: grid;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.nb-input, .nb-select, .nb-textarea {
+  width: 100%;
+  font: 700 0.88rem var(--nb-font-body);
+  color: var(--nb-ink);
+  background: var(--nb-paper);
+  border: var(--nb-border) solid var(--nb-ink);
+  border-radius: var(--nb-radius-sm);
+  padding: 8px 12px;
+  box-shadow: var(--nb-shadow-xs);
+  transition: box-shadow 0.12s ease, transform 0.12s ease;
+}
+
+.nb-input:focus, .nb-select:focus, .nb-textarea:focus {
+  outline: none;
+  box-shadow: var(--nb-shadow-sm), 0 0 0 3px var(--nb-blue);
+  transform: translateY(-1px);
+}
+
+.nb-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23111111' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+  padding-right: 34px;
+}
+
+/* Checkbox Brutalist Switch / Box */
+.nb-checkbox-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 0.86rem;
+  font-weight: 700;
+  padding: 7px 10px;
+  border-radius: var(--nb-radius-sm);
+  border: 2px dashed rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.45);
+  transition: all 0.12s ease;
+}
+
+:root[data-theme="dark"] .nb-checkbox-row {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .nb-checkbox-row {
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.2);
+  }
+}
+
+.nb-checkbox-row:hover {
+  background: rgba(255, 255, 255, 0.8);
+  border-style: solid;
+  border-color: var(--nb-ink);
+}
+
+.nb-checkbox-custom {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  border: var(--nb-border) solid var(--nb-ink);
+  border-radius: 5px;
+  background: var(--nb-paper);
+  cursor: pointer;
+  display: grid;
+  place-content: center;
+  box-shadow: 2px 2px 0 var(--nb-ink);
+  transition: transform 0.1s ease, background 0.1s ease;
+}
+
+.nb-checkbox-custom:checked {
+  background: var(--nb-teal);
+}
+
+.nb-checkbox-custom:checked::after {
+  content: "✔";
+  font-size: 13px;
+  font-weight: 900;
+  color: #111111;
+  line-height: 1;
+}
+
+/* ---------- alert / notifikasi ---------- */
+.nb-alert {
+  border: var(--nb-border) solid var(--nb-ink);
+  border-radius: var(--nb-radius-sm);
+  padding: 10px 14px;
+  box-shadow: var(--nb-shadow-xs);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #111111;
+  background: var(--nb-yellow);
+}
+
+.nb-alert.ok { background: var(--nb-teal); }
+.nb-alert.err { background: var(--nb-red); }
+
+/* Popup custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--nb-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--nb-ink);
+  border-radius: 999px;
+}

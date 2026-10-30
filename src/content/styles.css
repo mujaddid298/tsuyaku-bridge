@@ -1,0 +1,31 @@
+/* Styles for translated text in the webpage */
+.tx-trans {
+  display: block;
+  margin-top: 0.35em;
+  opacity: 0.88;
+  font-size: 0.95em;
+  border-left: 3px solid #6366f1;
+  padding-left: 0.6em;
+  color: inherit;
+  transition: opacity 0.2s ease;
+}
+
+.tx-trans[data-style="underline"] {
+  border-left: none;
+  padding-left: 0;
+  text-decoration: underline dotted #6366f1;
+}
+
+.tx-trans[data-style="box"] {
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  background: rgba(99, 102, 241, 0.05);
+  border-radius: 6px;
+  padding: 0.4em 0.6em;
+}
+
+@media (prefers-color-scheme: dark) {
+  .tx-trans {
+    opacity: 0.92;
+    border-left-color: #818cf8;
+  }
+}
