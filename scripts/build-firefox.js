@@ -64,6 +64,12 @@ if (manifest.web_accessible_resources) {
   }
 }
 
+// Options page: gunakan options_ui yang didukung secara resmi oleh Firefox
+manifest.options_ui = {
+  page: "src/options/index.html",
+  open_in_tab: true,
+};
+
 // Gecko ID untuk Firefox MV3
 manifest.browser_specific_settings = manifest.browser_specific_settings || {};
 manifest.browser_specific_settings.gecko = {
@@ -79,10 +85,23 @@ console.log("✓ Manifest dan bundle disesuaikan untuk Firefox MV3.");
 if (fs.existsSync(zipPath)) fs.unlinkSync(zipPath);
 if (fs.existsSync(xpiPath)) fs.unlinkSync(xpiPath);
 
-// 5. Buat file .zip menggunakan PowerShell lalu duplikasi ke .xpi
+// 5. Buat file .zip dan .xpi menggunakan `tar` dengan forward slash standar
+// PENTING: Jangan gunakan PowerShell Compress-Archive di Windows karena menghasilkan
+// backslash (\) yang menyebabkan Firefox gagal memuat file i18n/locale (NS_ERROR_FILE_NOT_FOUND).
 try {
-  const psCommand = `$ProgressPreference = 'SilentlyContinue'; Compress-Archive -Path '${firefoxDistDir}/*' -DestinationPath '${zipPath}' -Force`;
-  execSync(`powershell -NoProfile -Command "${psCommand}"`, { stdio: "inherit" });
+  const isWindows = process.platform === "win32";
+  const cmd = `tar -a -cf "${zipPath}" -C "${firefoxDistDir}" *`;
+  execSync(cmd, { shell: isWindows ? "cmd.exe" : "/bin/sh", stdio: "pipe" });
+
+  // Verifikasi apakah file zip menggunakan forward slash
+  const zipBuf = fs.readFileSync(zipPath);
+  const zipStr = zipBuf.toString("latin1");
+  if (zipStr.includes("_locales/id/messages.json")) {
+    console.log("✓ Verifikasi ZIP: path separator valid (forward slash /).");
+  } else {
+    console.warn("⚠️ Peringatan: path separator dalam ZIP mungkin bermasalah.");
+  }
+
   fs.copyFileSync(zipPath, xpiPath);
   console.log(`✓ Berhasil membuat file .xpi: ${xpiPath}`);
   console.log(`✓ Berhasil membuat file .zip: ${zipPath}`);
