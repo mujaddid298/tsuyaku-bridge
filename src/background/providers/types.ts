@@ -4,6 +4,7 @@ export interface TranslateOptions {
   target: string;
   source?: string;
   glossary?: GlossaryEntry[];
+  promptTemplate?: string;
   signal?: AbortSignal;
 }
 

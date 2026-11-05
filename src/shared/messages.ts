@@ -31,7 +31,9 @@ export type ToBackground =
   | { type: "TRANSLATE_TEXT"; text: string; targetLang?: string }
   | { type: "TEST_CONNECTION"; profileId: string }
   | { type: "LIST_MODELS"; profileId: string }
-  | { type: "GET_SETTINGS_PUBLIC" };
+  | { type: "GET_SETTINGS_PUBLIC" }
+  | { type: "BROADCAST_TRANSLATE"; mode: RenderMode; target: string }
+  | { type: "BROADCAST_RESTORE" };
 
 export type BackgroundEvent =
   | { type: "BATCH_RESULT"; jobId: string; results: TranslationResult[] }

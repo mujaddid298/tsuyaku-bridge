@@ -1,8 +1,12 @@
 node_modules
 dist
+dist-firefox
+*.zip
+*.xpi
 .agent
 .DS_Store
 *.local
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+

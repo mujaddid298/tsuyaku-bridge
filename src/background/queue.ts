@@ -72,7 +72,7 @@ class TranslationQueue {
 
     const toTranslate: TranslationUnit[] = [];
     const cachedResults: TranslationResult[] = [];
-    const promptVersion = settings.systemPromptTemplate || "v1";
+    const promptVersion = settings.systemPromptTemplate || "v2_natural";
     const glossaryHash = settings.glossary.length
       ? await sha256(JSON.stringify(settings.glossary))
       : "noglossary";
@@ -227,6 +227,7 @@ class TranslationQueue {
         target: settings.targetLang,
         source: settings.sourceLang,
         glossary: settings.glossary,
+        promptTemplate: settings.systemPromptTemplate,
         signal,
       });
 

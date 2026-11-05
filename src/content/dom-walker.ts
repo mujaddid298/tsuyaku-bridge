@@ -27,7 +27,35 @@ export function isMeaningfulText(text: string): boolean {
 }
 
 export function findClosestBlock(node: Node): Element | null {
-  let curr: Node | null = node.parentElement;
+  const directParent = node.parentElement;
+  if (!directParent) return null;
+  if (directParent.matches(SKIP_SELECTOR)) return null;
+
+  // Protect interactive elements and controls (buttons, links, summaries, menuitems):
+  // If directParent is inside an interactive element (e.g. <button><svg/><span>Roles</span></button>),
+  // we do not expand beyond directParent. This ensures sibling icons/SVGs and event handlers are untouched.
+  const interactiveAncestor = directParent.closest(
+    'button, a, summary, [role="button"], [role="tab"], [role="menuitem"], [class*="button"], [class*="btn"]'
+  );
+  if (interactiveAncestor) {
+    return directParent;
+  }
+
+  // If directParent has sibling elements that are icons, SVGs, or graphics, keep directParent as the isolated unit
+  if (directParent !== document.body && directParent.parentElement) {
+    const hasGraphicSibling = Array.from(directParent.parentElement.children).some(
+      (child) =>
+        child !== directParent &&
+        (child.tagName === "SVG" ||
+          child.matches("svg, img, [class*='icon'], [aria-hidden='true']"))
+    );
+    if (hasGraphicSibling) {
+      return directParent;
+    }
+  }
+
+  // Otherwise, walk up to find the closest block container (P, H1-H6, LI, etc.)
+  let curr: Node | null = directParent;
   while (curr && curr !== document.body && curr !== document.documentElement) {
     if (curr.nodeType === Node.ELEMENT_NODE) {
       const el = curr as Element;
@@ -36,7 +64,7 @@ export function findClosestBlock(node: Node): Element | null {
     }
     curr = curr.parentNode;
   }
-  return (node.parentElement as Element) || null;
+  return directParent;
 }
 
 export function collectTranslationUnits(root: Element = document.body): CollectedUnit[] {

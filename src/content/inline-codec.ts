@@ -4,6 +4,8 @@ export interface NodeSnapshot {
   tag: string;
   attrs: Record<string, string>;
   isVoid: boolean;
+  liveNode?: Node;
+  originalPosition?: "prefix" | "middle" | "suffix";
 }
 
 export interface CodecMap {
@@ -13,10 +15,15 @@ export interface CodecMap {
 export function encodeElement(el: Element): { text: string; map: CodecMap } {
   const map: CodecMap = {};
   let counter = 0;
+  let hasEncounteredText = false;
 
   function walk(node: Node): string {
     if (node.nodeType === Node.TEXT_NODE) {
-      return node.textContent || "";
+      const val = node.textContent || "";
+      if (val.trim()) {
+        hasEncounteredText = true;
+      }
+      return val;
     }
 
     if (node.nodeType !== Node.ELEMENT_NODE) {
@@ -28,7 +35,7 @@ export function encodeElement(el: Element): { text: string; map: CodecMap } {
 
     // Check if should be skipped or is void
     const isSkip = elem.matches(SKIP_SELECTOR);
-    const isVoid = ["br", "img", "hr"].includes(tag) || isSkip;
+    const isVoid = ["br", "img", "hr"].includes(tag) || isSkip || tag === "svg";
 
     const id = `t${++counter}`;
     const attrs: Record<string, string> = {};
@@ -36,7 +43,9 @@ export function encodeElement(el: Element): { text: string; map: CodecMap } {
       attrs[attr.name] = attr.value;
     }
 
-    map[id] = { tag, attrs, isVoid };
+    const originalPosition: "prefix" | "middle" = !hasEncounteredText ? "prefix" : "middle";
+
+    map[id] = { tag, attrs, isVoid, liveNode: elem, originalPosition };
 
     if (isVoid) {
       return `<${id}/>`;
@@ -56,6 +65,7 @@ export function decodeToFragment(
   documentRef: Document = document
 ): DocumentFragment {
   const fragment = documentRef.createDocumentFragment();
+  const usedTags = new Set<string>();
 
   // Tokenize string into text tokens and tags: <t1>, </t1>, <t1/>
   const tokenRegex = /<(\/?)(t\d+)(\/?)>/g;
@@ -95,12 +105,21 @@ export function decodeToFragment(
       continue;
     }
 
+    usedTags.add(tagId);
+
     if (isSelfClosing || snapshot.isVoid) {
-      const elem = documentRef.createElement(snapshot.tag);
-      for (const [k, v] of Object.entries(snapshot.attrs)) {
-        elem.setAttribute(k, v);
+      if (snapshot.liveNode) {
+        appendNode(snapshot.liveNode.cloneNode(true));
+      } else {
+        const elem =
+          snapshot.tag.toLowerCase() === "svg"
+            ? documentRef.createElementNS("http://www.w3.org/2000/svg", "svg")
+            : documentRef.createElement(snapshot.tag);
+        for (const [k, v] of Object.entries(snapshot.attrs)) {
+          elem.setAttribute(k, v);
+        }
+        appendNode(elem);
       }
-      appendNode(elem);
     } else if (isClosing) {
       // Pop stack matching this tagId if present
       for (let i = stack.length - 1; i >= 0; i--) {
@@ -111,9 +130,14 @@ export function decodeToFragment(
       }
     } else {
       // Opening tag
-      const elem = documentRef.createElement(snapshot.tag);
-      for (const [k, v] of Object.entries(snapshot.attrs)) {
-        elem.setAttribute(k, v);
+      let elem: Element;
+      if (snapshot.liveNode && snapshot.liveNode.nodeType === Node.ELEMENT_NODE) {
+        elem = (snapshot.liveNode as Element).cloneNode(false) as Element;
+      } else {
+        elem = documentRef.createElement(snapshot.tag);
+        for (const [k, v] of Object.entries(snapshot.attrs)) {
+          elem.setAttribute(k, v);
+        }
       }
       appendNode(elem);
       stack.push({ elem, tagId });
@@ -123,6 +147,19 @@ export function decodeToFragment(
   // Append remaining text after last tag
   if (lastIndex < translatedText.length) {
     appendNode(documentRef.createTextNode(translatedText.slice(lastIndex)));
+  }
+
+  // Fallback preservation: If the AI dropped any void or graphic tags (like <t1/>),
+  // re-insert them so icons, SVGs, and control elements are NEVER deleted!
+  for (const [tagId, snapshot] of Object.entries(map)) {
+    if (!usedTags.has(tagId) && snapshot.isVoid && snapshot.liveNode) {
+      const clone = snapshot.liveNode.cloneNode(true);
+      if (snapshot.originalPosition === "prefix") {
+        fragment.insertBefore(clone, fragment.firstChild);
+      } else {
+        fragment.appendChild(clone);
+      }
+    }
   }
 
   return fragment;

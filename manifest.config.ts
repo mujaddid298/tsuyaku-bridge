@@ -18,6 +18,7 @@ export default defineManifest({
   options_page: "src/options/index.html",
   background: {
     service_worker: "src/background/index.ts",
+    scripts: ["src/background/index.ts"],
     type: "module",
   },
   content_scripts: [
@@ -26,12 +27,12 @@ export default defineManifest({
       js: ["src/content/index.ts"],
       css: ["src/content/styles.css"],
       run_at: "document_idle",
-      all_frames: false,
+      all_frames: true,
+      match_about_blank: true,
     },
   ],
   permissions: ["storage", "activeTab", "contextMenus", "scripting"],
-  host_permissions: ["http://localhost/*", "http://127.0.0.1/*"],
-  optional_host_permissions: ["https://*/*", "http://*/*"],
+  host_permissions: ["http://localhost/*", "http://127.0.0.1/*", "https://*/*", "http://*/*"],
   commands: {
     "translate-page": {
       suggested_key: { default: "Alt+T" },
@@ -40,6 +41,12 @@ export default defineManifest({
     "translate-selection": {
       suggested_key: { default: "Alt+S" },
       description: "Terjemahkan teks terpilih",
+    },
+  },
+  browser_specific_settings: {
+    gecko: {
+      id: "ai-page-translator@antigravity",
+      strict_min_version: "109.0",
     },
   },
 });

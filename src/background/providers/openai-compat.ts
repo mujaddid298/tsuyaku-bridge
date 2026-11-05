@@ -28,7 +28,7 @@ export class OpenAICompatProvider implements Provider {
   async translateBatch(texts: string[], opts: TranslateOptions): Promise<string[]> {
     if (texts.length === 0) return [];
 
-    const system = buildSystemPrompt(opts);
+    const system = buildSystemPrompt(opts, opts.promptTemplate);
     const user = JSON.stringify(texts);
 
     const body: Record<string, unknown> = {

@@ -34,6 +34,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
         target: settings.targetLang,
         source: settings.sourceLang,
         glossary: settings.glossary,
+        promptTemplate: settings.systemPromptTemplate,
       });
 
       chrome.tabs.sendMessage(tab.id, {
@@ -110,8 +111,31 @@ chrome.runtime.onMessage.addListener((msg: ToBackground, sender, sendResponse) =
             target: msg.targetLang || settings.targetLang,
             source: settings.sourceLang,
             glossary: settings.glossary,
+            promptTemplate: settings.systemPromptTemplate,
           });
           sendResponse({ text: res });
+          break;
+        }
+        case "BROADCAST_TRANSLATE": {
+          const tabId = sender.tab?.id;
+          if (tabId) {
+            chrome.tabs.sendMessage(tabId, {
+              type: "TRANSLATE_PAGE",
+              mode: msg.mode || settings.mode,
+              target: msg.target || settings.targetLang,
+            });
+          }
+          sendResponse({ ok: true });
+          break;
+        }
+        case "BROADCAST_RESTORE": {
+          const tabId = sender.tab?.id;
+          if (tabId) {
+            chrome.tabs.sendMessage(tabId, {
+              type: "RESTORE_PAGE",
+            });
+          }
+          sendResponse({ ok: true });
           break;
         }
         default:
